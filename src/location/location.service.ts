@@ -35,12 +35,7 @@ export class LocationService {
         return cacheResponse;
       }
       return this.httpService
-        .get(`${EXTERNAL_API_BASE}/admin/location/states`, {
-          headers: {
-            'user-agent':
-              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-          },
-        })
+        .get(`${EXTERNAL_API_BASE}/admin/location/states`)
         .pipe(
           map((response) => {
             this.setResponseToCache(CACHE_KEYS.LOCATION_STATES, response.data);
@@ -67,12 +62,7 @@ export class LocationService {
         return cacheResponse;
       }
       return this.httpService
-        .get(`${EXTERNAL_API_BASE}/admin/location/districts/${stateId}`, {
-          headers: {
-            'user-agent':
-              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-          },
-        })
+        .get(`${EXTERNAL_API_BASE}/admin/location/districts/${stateId}`)
         .pipe(
           map((response) => {
             this.setResponseToCache(DISTRICTS_KEY, response.data);
