@@ -4,29 +4,20 @@ import { map } from 'rxjs/operators';
 import { CACHE_MANAGER } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { CacheService } from 'src/cache.service';
 
 @Injectable()
 export class LocationService {
   constructor(
     private httpService: HttpService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private cacheService: CacheService,
   ) {}
-
-  async getFromCache(key) {
-    const responseFromCache = await this.cacheManager.get(key);
-    if (responseFromCache) {
-      return JSON.parse(responseFromCache as any);
-    }
-    return null;
-  }
-
-  async setResponseToCache(key, data, ttl = 300) {
-    this.cacheManager.set(key, JSON.stringify(data), { ttl });
-  }
 
   async getStates() {
     try {
-      const cacheResponse = await this.getFromCache(CACHE_KEYS.LOCATION_STATES);
+      const cacheResponse = await this.cacheService.getFromCache(
+        CACHE_KEYS.LOCATION_STATES,
+      );
       if (cacheResponse) {
         console.log('FROM CACHE');
         return cacheResponse;
@@ -35,7 +26,10 @@ export class LocationService {
         .get(`${EXTERNAL_API_BASE}/admin/location/states`)
         .pipe(
           map((response) => {
-            this.setResponseToCache(CACHE_KEYS.LOCATION_STATES, response.data);
+            this.cacheService.setResponseToCache(
+              CACHE_KEYS.LOCATION_STATES,
+              response.data,
+            );
             return response.data;
           }),
         );
@@ -52,7 +46,7 @@ export class LocationService {
         stateId,
       );
 
-      const cacheResponse = await this.getFromCache(DISTRICTS_KEY);
+      const cacheResponse = await this.cacheService.getFromCache(DISTRICTS_KEY);
 
       if (cacheResponse) {
         console.log('FROM CACHE with CACHEKEY', DISTRICTS_KEY);
@@ -62,7 +56,7 @@ export class LocationService {
         .get(`${EXTERNAL_API_BASE}/admin/location/districts/${stateId}`)
         .pipe(
           map((response) => {
-            this.setResponseToCache(DISTRICTS_KEY, response.data);
+            this.cacheService.setResponseToCache(DISTRICTS_KEY, response.data);
             return response.data;
           }),
         );

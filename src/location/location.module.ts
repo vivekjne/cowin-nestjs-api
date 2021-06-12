@@ -1,6 +1,7 @@
 import { CacheModule, HttpModule, Module } from '@nestjs/common';
 import { LocationService } from './location.service';
 import { LocationController } from './location.controller';
+import { CacheService } from 'src/cache.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { LocationController } from './location.controller';
     CacheModule.register(),
   ],
   controllers: [LocationController],
-  providers: [LocationService],
+  providers: [LocationService, CacheService],
 })
 export class LocationModule {}
