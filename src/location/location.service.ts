@@ -1,9 +1,6 @@
-import { HttpService, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 import { CACHE_KEYS, EXTERNAL_API_BASE } from 'src/utils/constants';
 import { map } from 'rxjs/operators';
-import { CreateLocationDto } from './dto/create-location.dto';
-import { UpdateLocationDto } from './dto/update-location.dto';
-import { response } from 'express';
 import { CACHE_MANAGER } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
