@@ -4,6 +4,7 @@ import { AvailabilityController } from './availability.controller';
 import { CacheService } from 'src/cache.service';
 import { HttpModule } from '@nestjs/common';
 import { EXTERNAL_API_BASE } from 'src/utils/constants';
+import { CacheModule } from '@nestjs/common/cache';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { EXTERNAL_API_BASE } from 'src/utils/constants';
           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
       },
     }),
+    CacheModule.register(),
   ],
   controllers: [AvailabilityController],
   providers: [AvailabilityService, CacheService],
