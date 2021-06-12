@@ -15,15 +15,24 @@ export class LocationService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
+  async getFromCache(key) {
+    const responseFromCache = await this.cacheManager.get(key);
+    if (responseFromCache) {
+      return JSON.parse(responseFromCache as any);
+    }
+    return null;
+  }
+
+  async setResponseToCache(key, data, ttl = 300) {
+    this.cacheManager.set(key, JSON.stringify(data), { ttl });
+  }
+
   async getStates() {
     try {
-      const statesResponseFromCache = await this.cacheManager.get(
-        CACHE_KEYS.LOCATION_STATES,
-      );
-      console.log(statesResponseFromCache);
-      if (statesResponseFromCache) {
+      const cacheResponse = await this.getFromCache(CACHE_KEYS.LOCATION_STATES);
+      if (cacheResponse) {
         console.log('FROM CACHE');
-        return JSON.parse(statesResponseFromCache as any);
+        return cacheResponse;
       }
       return this.httpService
         .get(`${EXTERNAL_API_BASE}/admin/location/states`, {
@@ -34,11 +43,39 @@ export class LocationService {
         })
         .pipe(
           map((response) => {
-            this.cacheManager.set(
-              CACHE_KEYS.LOCATION_STATES,
-              JSON.stringify(response.data),
-              { ttl: 300 },
-            );
+            this.setResponseToCache(CACHE_KEYS.LOCATION_STATES, response.data);
+            return response.data;
+          }),
+        );
+    } catch (err) {
+      throw Error(err.message);
+    }
+  }
+
+  // get districts by states
+  async getDistrictsByStates(stateId: string) {
+    try {
+      const DISTRICTS_KEY = CACHE_KEYS.LOCATION_DISTRICT.replace(
+        '{id}',
+        stateId,
+      );
+
+      const cacheResponse = await this.getFromCache(DISTRICTS_KEY);
+
+      if (cacheResponse) {
+        console.log('FROM CACHE with CACHEKEY', DISTRICTS_KEY);
+        return cacheResponse;
+      }
+      return this.httpService
+        .get(`${EXTERNAL_API_BASE}/admin/location/districts/${stateId}`, {
+          headers: {
+            'user-agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+          },
+        })
+        .pipe(
+          map((response) => {
+            this.setResponseToCache(DISTRICTS_KEY, response.data);
             return response.data;
           }),
         );
