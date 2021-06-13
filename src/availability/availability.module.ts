@@ -1,8 +1,10 @@
-import { CacheModule, HttpModule, Module } from '@nestjs/common';
-import { LocationService } from './location.service';
-import { LocationController } from './location.controller';
+import { Module } from '@nestjs/common';
+import { AvailabilityService } from './availability.service';
+import { AvailabilityController } from './availability.controller';
 import { CacheService } from 'src/cache.service';
+import { HttpModule } from '@nestjs/common';
 import { EXTERNAL_API_BASE } from 'src/utils/constants';
+import { CacheModule } from '@nestjs/common/cache';
 
 @Module({
   imports: [
@@ -15,7 +17,7 @@ import { EXTERNAL_API_BASE } from 'src/utils/constants';
     }),
     CacheModule.register(),
   ],
-  controllers: [LocationController],
-  providers: [LocationService, CacheService],
+  controllers: [AvailabilityController],
+  providers: [AvailabilityService, CacheService],
 })
-export class LocationModule {}
+export class AvailabilityModule {}
