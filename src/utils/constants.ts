@@ -4,4 +4,5 @@ export const CACHE_KEYS = {
   LOCATION_DISTRICT: 'location/states/{id}/district',
 
   CENTERS_BY_LATLONG: 'centers/{lat}-{long}',
+  CALENDAR_BY_CENTER: 'CALENDAR/CENTER/{centerId}',
 };

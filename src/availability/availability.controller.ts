@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AvailabilityService } from './availability.service';
 
 @Controller('availability')
@@ -14,5 +14,18 @@ export class AvailabilityController {
     const longitude = Number(long).toFixed(2);
 
     return this.availabilityService.findCentersByLocation(latitude, longitude);
+  }
+
+  @Get('centers/:centerId/calendar')
+  findCalendarByCenter(
+    @Param('centerId') centerId: string,
+    @Query('date') date: string,
+  ) {
+    console.log('IN API');
+    // const dateForamtted = `${date.getDay()}-${(date.getMonth() + 1)
+    //   .toString()
+    //   .padStart(2, '0')}-${date.getFullYear()}`;
+
+    return this.availabilityService.findCalendarByCenter(centerId, date);
   }
 }
