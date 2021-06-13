@@ -18,16 +18,20 @@ export class AvailabilityController {
   }
 
   // Get Calendar by center
-  @Get('centers/:centerId/calendar')
+  @Get('calendar/center/:centerId')
   findCalendarByCenter(
     @Param('centerId') centerId: string,
     @Query('date') date: string,
   ) {
     console.log('IN API');
-    // const dateForamtted = `${date.getDay()}-${(date.getMonth() + 1)
-    //   .toString()
-    //   .padStart(2, '0')}-${date.getFullYear()}`;
-
     return this.availabilityService.findCalendarByCenter(centerId, date);
+  }
+
+  @Get('calendar/district/:districtId')
+  findCalendarByDistrict(
+    @Param('districtId') districtId: string,
+    @Query('date') date: string,
+  ) {
+    return this.availabilityService.findCalendarByDistrict(districtId, date);
   }
 }

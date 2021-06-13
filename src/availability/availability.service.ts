@@ -48,8 +48,8 @@ export class AvailabilityService {
 
   async findCalendarByCenter(centerId: string, date: string) {
     const CACHE_STORE_KEY = CACHE_KEYS.CALENDAR_BY_CENTER.replace(
-      '{centerId}',
-      centerId,
+      '{centerId}-{date}',
+      `${centerId}-${date}`,
     );
 
     try {
@@ -66,10 +66,49 @@ export class AvailabilityService {
         )
         .pipe(
           map((response) => {
-            this.cacheService.setResponseToCache(
-              CACHE_STORE_KEY,
-              response.data,
-            );
+            if (Object.keys(response.data)?.length > 0) {
+              this.cacheService.setResponseToCache(
+                CACHE_STORE_KEY,
+                response.data,
+              );
+            }
+
+            return response.data;
+          }),
+        );
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async findCalendarByDistrict(districtId: string, date: string) {
+    const CACHE_STORE_KEY = CACHE_KEYS.CALENDAR_BY_DISTRICT.replace(
+      '{districtId}-{date}',
+      `${districtId}-${date}`,
+    );
+
+    try {
+      const cacheResponse = await this.cacheService.getFromCache(
+        CACHE_STORE_KEY,
+      );
+      if (cacheResponse) {
+        console.log('FROM CACHE', CACHE_STORE_KEY);
+        return cacheResponse;
+      }
+      console.log(districtId, date);
+      return this.httpService
+        .get(
+          `/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${date}`,
+        )
+        .pipe(
+          map((response) => {
+            if (Object.keys(response.data)?.length > 0) {
+              this.cacheService.setResponseToCache(
+                CACHE_STORE_KEY,
+                response.data,
+              );
+            }
+
             return response.data;
           }),
         );
