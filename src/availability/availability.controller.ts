@@ -5,6 +5,7 @@ import { AvailabilityService } from './availability.service';
 export class AvailabilityController {
   constructor(private readonly availabilityService: AvailabilityService) {}
 
+  // Get centers by latitude and longitude
   @Get('centers/latLong')
   findCentersByLocation(
     @Query('lat') lat: string,
@@ -16,6 +17,7 @@ export class AvailabilityController {
     return this.availabilityService.findCentersByLocation(latitude, longitude);
   }
 
+  // Get Calendar by center
   @Get('centers/:centerId/calendar')
   findCalendarByCenter(
     @Param('centerId') centerId: string,
