@@ -1,5 +1,5 @@
 import { HttpService, Injectable } from '@nestjs/common';
-import { CACHE_KEYS, EXTERNAL_API_BASE } from 'src/utils/constants';
+import { CACHE_KEYS } from 'src/utils/constants';
 import { map } from 'rxjs/operators';
 import { CacheService } from 'src/cache.service';
 
