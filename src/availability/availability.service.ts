@@ -70,6 +70,7 @@ export class AvailabilityService {
               this.cacheService.setResponseToCache(
                 CACHE_STORE_KEY,
                 response.data,
+                60,
               );
             }
 
@@ -106,6 +107,44 @@ export class AvailabilityService {
               this.cacheService.setResponseToCache(
                 CACHE_STORE_KEY,
                 response.data,
+                60,
+              );
+            }
+
+            return response.data;
+          }),
+        );
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  async findSessionsByDistrict(districtId: string, date: string) {
+    const CACHE_STORE_KEY = CACHE_KEYS.SESSIONS_BY_DISTRICT.replace(
+      '{districtId}-{date}',
+      `${districtId}-${date}`,
+    );
+
+    try {
+      const cacheResponse = await this.cacheService.getFromCache(
+        CACHE_STORE_KEY,
+      );
+      if (cacheResponse) {
+        console.log('FROM CACHE', CACHE_STORE_KEY);
+        return cacheResponse;
+      }
+      console.log(districtId, date);
+      return this.httpService
+        .get(
+          `/appointment/sessions/public/findByDistrict?district_id=${districtId}&date=${date}`,
+        )
+        .pipe(
+          map((response) => {
+            if (Object.keys(response.data)?.length > 0) {
+              this.cacheService.setResponseToCache(
+                CACHE_STORE_KEY,
+                response.data,
+                60,
               );
             }
 
