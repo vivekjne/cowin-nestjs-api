@@ -18,7 +18,7 @@ export class AvailabilityController {
   }
 
   // Get Calendar by center
-  @Get('calendar/center/:centerId')
+  @Get('calendar/centers/:centerId')
   findCalendarByCenter(
     @Param('centerId') centerId: string,
     @Query('date') date: string,
@@ -27,7 +27,17 @@ export class AvailabilityController {
     return this.availabilityService.findCalendarByCenter(centerId, date);
   }
 
-  @Get('calendar/district/:districtId')
+  // Get Sessions by district and date
+  @Get('sessions/districts/:districtId')
+  findSessionsByDistrict(
+    @Param('districtId') districtId: string,
+    @Query('date') date: string,
+  ) {
+    return this.availabilityService.findSessionsByDistrict(districtId, date);
+  }
+
+  // Get Calendar by district and date for 7 days
+  @Get('calendar/districts/:districtId')
   findCalendarByDistrict(
     @Param('districtId') districtId: string,
     @Query('date') date: string,

@@ -6,4 +6,6 @@ export const CACHE_KEYS = {
   CENTERS_BY_LATLONG: 'centers/{lat}-{long}',
   CALENDAR_BY_CENTER: 'CALENDAR/CENTER/{centerId}-{date}',
   CALENDAR_BY_DISTRICT: 'CALENDAR/DISTRICT/{districtId}-{date}',
+
+  SESSIONS_BY_DISTRICT: 'SESSIONS/DISTRICT/{districtId}-{date}',
 };
