@@ -44,4 +44,10 @@ export class AvailabilityController {
   ) {
     return this.availabilityService.findCalendarByDistrict(districtId, date);
   }
+
+  // Using pin code, date
+  @Get('session/')
+  findSession(@Query('pin') pin: string, @Query('date') date: string) {
+    return this.availabilityService.findSession(pin, date);
+  }
 }

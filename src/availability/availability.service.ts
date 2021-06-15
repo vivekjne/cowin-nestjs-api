@@ -155,4 +155,8 @@ export class AvailabilityService {
       throw Error(err);
     }
   }
+
+  async findSession(pin: string, date: string){
+    return {success:"ok"}
+  }
 }
